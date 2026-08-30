@@ -1,0 +1,4 @@
+-keep class com.musicenhancer.app.dsp.NativeEngine { *; }
+-keep class com.musicenhancer.app.dsp.** { *; }
+-keepclassmembers class * { native <methods>; }
+-dontwarn com.google.common.**

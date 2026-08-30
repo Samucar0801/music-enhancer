@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Reprodução em segundo plano (Android 14+ exige o tipo específico). -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <!-- Só para LER o codec ativo; não fazemos scan, então não pedimos
+         BLUETOOTH_SCAN nem localização. -->
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+
+    <!-- Internet é OPCIONAL: apenas metadados públicos e download dos modelos.
+         O app funciona inteiro sem ela. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- NÃO pedimos MANAGE_EXTERNAL_STORAGE nem READ_EXTERNAL_STORAGE:
+         a seleção de pasta usa o Storage Access Framework, que dá acesso
+         apenas ao que o usuário escolheu. (Regras 64/65) -->
+
+    <application
+        android:name=".MusicEnhancerApp"
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:largeHeap="true"
+        android:theme="@style/Theme.MusicEnhancer">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.MusicEnhancer">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name=".playback.PlaybackService"
+            android:exported="true"
+            android:foregroundServiceType="mediaPlayback">
+            <intent-filter>
+                <action android:name="androidx.media3.session.MediaSessionService" />
+                <action android:name="android.media.browse.MediaBrowserService" />
+            </intent-filter>
+        </service>
+
+        <!-- Processamento pesado offline. mediaProcessing tem limite de tempo
+             no Android 15, o que é adequado: processar 1 música leva minutos,
+             não horas. -->
+        <service
+            android:name=".analysis.EnhanceService"
+            android:exported="false"
+            android:foregroundServiceType="mediaProcessing" />
+    </application>
+</manifest>

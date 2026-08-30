@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Music Enhancer</string>
+    <string name="channel_enhance">Processamento de áudio</string>
+    <string name="processing">Aprimorando…</string>
+    <string name="select_folder">Selecionar pasta</string>
+    <string name="library">Biblioteca</string>
+    <string name="player">Reprodução</string>
+    <string name="settings">Ajustes</string>
+    <string name="original">Original</string>
+    <string name="enhanced">Aprimorado</string>
+    <string name="bypass">Bypass</string>
+</resources>
